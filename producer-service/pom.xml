@@ -14,8 +14,7 @@
     <artifactId>producer-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>producer-service</name>
-    <description>Produces domain events reliably using the transactional
-        outbox pattern and forwards them to SNS to be consumed by other services</description>
+    <description>Produces domain events reliably using the transactional outbox pattern and forwards them to SNS to be consumed by other services</description>
 
     <properties>
         <java.version>11</java.version>
@@ -99,6 +98,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>9</source>
+                    <target>9</target>
+                </configuration>
             </plugin>
         </plugins>
     </build>

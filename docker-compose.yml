@@ -1,0 +1,25 @@
+version: '2'
+services:
+  producer-service:
+    build: producer-service
+    ports:
+      - 8001:8080
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+    depends_on:
+      - postgres
+    volumes:
+      - ~/.aws/:/root/.aws:ro
+  consumer-service:
+    build: consumer-service
+    ports:
+      - 8002:8080
+    volumes:
+      - ~/.aws/:/root/.aws:ro
+  postgres:
+    image: postgres:12-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
