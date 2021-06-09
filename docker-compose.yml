@@ -12,19 +12,30 @@ services:
       - localstack
     links:
       - localstack
-    restart: on-failure
-  consumer-service:
+  consumer-service-1:
     build: consumer-service
-    container_name: consumer-service
+    container_name: consumer-service-1
     ports:
       - 8002:8080
     environment:
       - SPRING_PROFILES_ACTIVE=localstack
+      - INPUT_EVENT_QUEUE=test_queue_1
     depends_on:
       - localstack
     links:
       - localstack
-    restart: on-failure
+  consumer-service-2:
+    build: consumer-service
+    container_name: consumer-service-2
+    ports:
+      - 8003:8080
+    environment:
+      - SPRING_PROFILES_ACTIVE=localstack
+      - INPUT_EVENT_QUEUE=test_queue_2
+    depends_on:
+      - localstack
+    links:
+      - localstack
   postgres:
     image: postgres:12-alpine
     container_name: postgres
