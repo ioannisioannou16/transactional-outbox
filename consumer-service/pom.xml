@@ -12,7 +12,7 @@
 
     <groupId>me.ioannisioannou</groupId>
     <artifactId>consumer-service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>consumer-service</name>
     <description>Consumes domain events from its own SQS</description>
 

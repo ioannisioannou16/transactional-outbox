@@ -17,17 +17,17 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class RelayService {
+public class CDCService {
 
     private final OutboxRepository outboxRepository;
     private final NotificationMessagingTemplate notificationMessagingTemplate;
     private final ObjectMapper objectMapper;
 
-    @Value("${relay.sns-topic}")
+    @Value("${cdc.sns_topic}")
     private String snsTopicName;
 
-    @Scheduled(fixedDelayString = "${relay.polling-ms}")
-    public void relayEvents() {
+    @Scheduled(fixedDelayString = "${cdc.polling_ms}")
+    public void forwardEventsToSNS() {
         List<Outbox> outboxEvent = outboxRepository.findTop100ByOrderByCreatedAtAsc();
         outboxEvent.forEach(event -> {
             Map<String, Object> headers = Map.of("eventType", objectMapper.convertValue(event.getPayload(), DomainEvent.class).getClass().getSimpleName());

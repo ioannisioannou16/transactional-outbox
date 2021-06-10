@@ -1,50 +1,52 @@
-version: '2'
+version: '2.4'
 services:
   producer-service:
-    build: producer-service
+    build: ./producer-service
     container_name: producer-service
     ports:
       - 8001:8080
     environment:
       - SPRING_PROFILES_ACTIVE=localstack
     depends_on:
-      - postgres
-      - localstack
-    links:
-      - localstack
+      postgres:
+        condition: service_healthy
+      localstack:
+        condition: service_healthy
   consumer-service-1:
-    build: consumer-service
+    build: ./consumer-service
     container_name: consumer-service-1
     ports:
       - 8002:8080
     environment:
       - SPRING_PROFILES_ACTIVE=localstack
-      - INPUT_EVENT_QUEUE=test_queue_1
+      - INPUT_QUEUE=consumer_1_queue
     depends_on:
-      - localstack
-    links:
-      - localstack
+      localstack:
+        condition: service_healthy
   consumer-service-2:
-    build: consumer-service
+    build: ./consumer-service
     container_name: consumer-service-2
     ports:
       - 8003:8080
     environment:
       - SPRING_PROFILES_ACTIVE=localstack
-      - INPUT_EVENT_QUEUE=test_queue_2
+      - INPUT_QUEUE=consumer_2_queue
     depends_on:
-      - localstack
-    links:
-      - localstack
+      localstack:
+        condition: service_healthy
   postgres:
     image: postgres:12-alpine
     container_name: postgres
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
   localstack:
-    image: localstack/localstack
+    image: localstack/localstack:0.12.12
     container_name: localstack
+    healthcheck:
+      test: ["CMD-SHELL", "awslocal sns list-topics && awslocal sqs list-queues"]
     environment:
       - AWS_DEFAULT_REGION=eu-central-1
       - SERVICES=sqs,sns
