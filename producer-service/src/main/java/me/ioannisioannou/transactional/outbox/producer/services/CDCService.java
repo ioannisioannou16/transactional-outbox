@@ -7,6 +7,7 @@ import me.ioannisioannou.transactional.outbox.events.DomainEvent;
 import me.ioannisioannou.transactional.outbox.producer.entities.Outbox;
 import me.ioannisioannou.transactional.outbox.producer.repositories.OutboxRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,15 +26,17 @@ public class CDCService {
 
     @Value("${cdc.sns_topic}")
     private String snsTopicName;
+    @Value("${cdc.batch_size}")
+    private int batchSize;
 
     @Scheduled(fixedDelayString = "${cdc.polling_ms}")
     public void forwardEventsToSNS() {
-        List<Outbox> outboxEvent = outboxRepository.findTop100ByOrderByCreatedAtAsc();
-        outboxEvent.forEach(event -> {
+        List<Outbox> entities = outboxRepository.findAll(Pageable.ofSize(batchSize)).toList();
+        entities.forEach(event -> {
             Map<String, Object> headers = Map.of("eventType", objectMapper.convertValue(event.getPayload(), DomainEvent.class).getClass().getSimpleName());
             notificationMessagingTemplate
                     .convertAndSend(snsTopicName, event.getPayload(), headers);
-            outboxRepository.delete(event);
         });
+        outboxRepository.deleteAllInBatch(entities);
     }
 }

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class EventService {
+public class OutboxService {
 
     private final OutboxRepository outboxRepository;
     private final ObjectMapper objectMapper;
