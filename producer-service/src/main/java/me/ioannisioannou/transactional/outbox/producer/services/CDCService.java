@@ -31,7 +31,7 @@ public class CDCService {
 
     @Scheduled(fixedDelayString = "${cdc.polling_ms}")
     public void forwardEventsToSNS() {
-        List<Outbox> entities = outboxRepository.findAll(Pageable.ofSize(batchSize)).toList();
+        List<Outbox> entities = outboxRepository.findAllByOrderByIdAsc(Pageable.ofSize(batchSize)).toList();
         entities.forEach(event -> {
             Map<String, Object> headers = Map.of("eventType", objectMapper.convertValue(event.getPayload(), DomainEvent.class).getClass().getSimpleName());
             notificationMessagingTemplate

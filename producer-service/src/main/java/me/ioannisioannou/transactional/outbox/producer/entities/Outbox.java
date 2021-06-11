@@ -7,15 +7,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.UUID;
 
 @Entity
-@Table(name = "outbox", indexes = @Index(columnList = "createdAt"))
+@Table(name = "outbox")
 @Getter
 @Builder
 @AllArgsConstructor
@@ -24,12 +22,8 @@ import java.util.UUID;
 public class Outbox {
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "outbox_seq")
+    private Long id;
 
     @Column(columnDefinition = "json")
     private JsonNode payload;
