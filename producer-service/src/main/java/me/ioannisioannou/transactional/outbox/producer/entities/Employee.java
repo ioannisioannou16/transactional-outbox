@@ -1,36 +1,25 @@
 package me.ioannisioannou.transactional.outbox.producer.entities;
 
-import lombok.AccessLevel;
-import lombok.Getter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Entity
 @Table(name = "employee")
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Employee {
-
     @Id
     @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
-    @NotEmpty
     private String firstName;
-
-    @NotEmpty
     private String lastName;
-
-    @NotNull
-    @Email
     private String email;
 
     @Version

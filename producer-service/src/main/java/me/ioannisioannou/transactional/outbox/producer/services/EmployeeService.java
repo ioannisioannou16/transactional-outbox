@@ -19,11 +19,12 @@ import java.util.UUID;
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private final EmployeeMapper employeeMapper;
     private final ApplicationEventPublisher eventPublisher;
 
     public Employee create(Employee employee) {
         Employee savedEmployee = employeeRepository.save(employee);
-        eventPublisher.publishEvent(EmployeeMapper.toEmployeeCreatedDomainEvent(employee));
+        eventPublisher.publishEvent(employeeMapper.toEmployeeCreatedDomainEvent(employee));
         return savedEmployee;
     }
 
@@ -41,7 +42,7 @@ public class EmployeeService {
                 .map(existingEmployee -> {
                     existingEmployee.updateTo(employee);
                     Employee updatedEmployee = employeeRepository.save(existingEmployee);
-                    eventPublisher.publishEvent(EmployeeMapper.toEmployeeUpdatedDomainEvent(employee));
+                    eventPublisher.publishEvent(employeeMapper.toEmployeeUpdatedDomainEvent(employee));
                     return updatedEmployee;
                 })
                 .orElseThrow(() -> new EmployeeDoesNotExistException(id));
@@ -50,7 +51,7 @@ public class EmployeeService {
     public void delete(UUID id) {
         try {
             employeeRepository.deleteById(id);
-            eventPublisher.publishEvent(EmployeeMapper.toEmployeeDeletedDomainEvent(id));
+            eventPublisher.publishEvent(employeeMapper.toEmployeeDeletedDomainEvent(id));
         } catch (EmptyResultDataAccessException ignored) {
             throw new EmployeeDoesNotExistException(id);
         }

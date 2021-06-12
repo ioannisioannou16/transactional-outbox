@@ -1,7 +1,12 @@
 package me.ioannisioannou.transactional.outbox.producer.controllers;
 
 import lombok.RequiredArgsConstructor;
+import me.ioannisioannou.transactional.outbox.producer.dtos.CreateEmployeeRequest;
+import me.ioannisioannou.transactional.outbox.producer.dtos.CreateEmployeeResponse;
+import me.ioannisioannou.transactional.outbox.producer.dtos.UpdateEmployeeRequest;
+import me.ioannisioannou.transactional.outbox.producer.dtos.UpdateEmployeeResponse;
 import me.ioannisioannou.transactional.outbox.producer.entities.Employee;
+import me.ioannisioannou.transactional.outbox.producer.mappers.EmployeeMapper;
 import me.ioannisioannou.transactional.outbox.producer.services.EmployeeService;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,10 +21,12 @@ import java.util.UUID;
 public class EmployeeController {
 
     private final EmployeeService employeeService;
+    private final EmployeeMapper employeeMapper;
 
     @PostMapping
-    public Employee createEmployee(@RequestBody @Valid Employee employee) {
-        return employeeService.create(employee);
+    public CreateEmployeeResponse createEmployee(@RequestBody @Valid CreateEmployeeRequest createEmployeeRequest) {
+        return employeeMapper.toCreateEmployeeResponse(
+                employeeService.create(employeeMapper.toCreateEmployeeEntity(createEmployeeRequest)));
     }
 
     @GetMapping
@@ -33,8 +40,9 @@ public class EmployeeController {
     }
 
     @PutMapping("/{employeeId}")
-    public Employee updateEmployee(@PathVariable @NotNull UUID employeeId, @RequestBody @Valid Employee employee) {
-        return employeeService.update(employeeId, employee);
+    public UpdateEmployeeResponse updateEmployee(@PathVariable @NotNull UUID employeeId, @RequestBody @Valid UpdateEmployeeRequest updateEmployeeRequest) {
+        return employeeMapper.toUpdateEmployeeResponse(
+                employeeService.update(employeeId, employeeMapper.toUpdateEmployeeEntity(updateEmployeeRequest)));
     }
 
     @DeleteMapping("/{employeeId}")

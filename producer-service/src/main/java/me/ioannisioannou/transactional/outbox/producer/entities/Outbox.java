@@ -6,11 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(name = "outbox")
@@ -27,7 +25,4 @@ public class Outbox {
 
     @Column(columnDefinition = "json")
     private JsonNode payload;
-
-    @CreationTimestamp
-    private Date createdAt;
 }
