@@ -21,6 +21,7 @@ public class OutboxService {
         outboxRepository.save(Outbox.builder()
                 .aggregateId(event.getAggregateId())
                 .aggregateType(event.getAggregateType())
+                .eventType(event.getDomainEventType())
                 .payload(objectMapper.convertValue(event.getDomainEvent(), JsonNode.class))
                 .build());
     }

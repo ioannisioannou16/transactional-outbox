@@ -10,4 +10,8 @@ public class EnrichedDomainEvent<T extends DomainEvent> {
     private String aggregateType;
     private String aggregateId;
     private T domainEvent;
+
+    public String getDomainEventType() {
+        return domainEvent.getClass().getSimpleName();
+    }
 }

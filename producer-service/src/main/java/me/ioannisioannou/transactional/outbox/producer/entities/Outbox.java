@@ -26,6 +26,8 @@ public class Outbox {
 
     private String aggregateId;
 
+    private String eventType;
+
     @Column(columnDefinition = "json")
     private JsonNode payload;
 }
