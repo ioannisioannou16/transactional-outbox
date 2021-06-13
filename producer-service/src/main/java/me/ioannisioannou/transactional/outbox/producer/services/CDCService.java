@@ -3,7 +3,6 @@ package me.ioannisioannou.transactional.outbox.producer.services;
 import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sns.model.MessageAttributeValue;
 import com.amazonaws.services.sns.model.PublishRequest;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import me.ioannisioannou.transactional.outbox.producer.entities.Outbox;
 import me.ioannisioannou.transactional.outbox.producer.repositories.OutboxRepository;
@@ -23,7 +22,6 @@ public class CDCService {
 
     private final OutboxRepository outboxRepository;
     private final AmazonSNS amazonSNS;
-    private final ObjectMapper objectMapper;
 
     @Value("${cdc.sns_topic}")
     private String snsTopic;
