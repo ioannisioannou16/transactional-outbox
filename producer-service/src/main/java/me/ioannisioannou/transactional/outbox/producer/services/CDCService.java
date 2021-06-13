@@ -1,7 +1,9 @@
 package me.ioannisioannou.transactional.outbox.producer.services;
 
+import com.amazonaws.services.sns.AmazonSNS;
+import com.amazonaws.services.sns.model.MessageAttributeValue;
+import com.amazonaws.services.sns.model.PublishRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.awspring.cloud.messaging.core.NotificationMessagingTemplate;
 import lombok.RequiredArgsConstructor;
 import me.ioannisioannou.transactional.outbox.events.DomainEvent;
 import me.ioannisioannou.transactional.outbox.producer.entities.Outbox;
@@ -21,21 +23,24 @@ import java.util.Map;
 public class CDCService {
 
     private final OutboxRepository outboxRepository;
-    private final NotificationMessagingTemplate notificationMessagingTemplate;
+    private final AmazonSNS amazonSNS;
     private final ObjectMapper objectMapper;
 
     @Value("${cdc.sns_topic}")
-    private String snsTopicName;
+    private String snsTopic;
     @Value("${cdc.batch_size}")
     private int batchSize;
 
     @Scheduled(fixedDelayString = "${cdc.polling_ms}")
     public void forwardEventsToSNS() {
         List<Outbox> entities = outboxRepository.findAllByOrderByIdAsc(Pageable.ofSize(batchSize)).toList();
-        entities.forEach(event -> {
-            Map<String, Object> headers = Map.of("eventType", objectMapper.convertValue(event.getPayload(), DomainEvent.class).getClass().getSimpleName());
-            notificationMessagingTemplate
-                    .convertAndSend(snsTopicName, event.getPayload(), headers);
+        entities.forEach(entity -> {
+            String domainEventType = objectMapper.convertValue(entity.getPayload(), DomainEvent.class).getClass().getSimpleName();
+            amazonSNS.publish(new PublishRequest()
+                    .withTopicArn(snsTopic)
+                    .withMessage(entity.getPayload().toString())
+                    .withMessageGroupId(String.format("%s-%s", entity.getAggregateType(), entity.getAggregateId()))
+                    .withMessageAttributes(Map.of("eventType", new MessageAttributeValue().withDataType("String").withStringValue(domainEventType))));
         });
         outboxRepository.deleteAllInBatch(entities);
     }

@@ -42,7 +42,7 @@ public class EmployeeService {
                 .map(existingEmployee -> {
                     existingEmployee.updateTo(employee);
                     Employee updatedEmployee = employeeRepository.save(existingEmployee);
-                    eventPublisher.publishEvent(employeeMapper.toEmployeeUpdatedDomainEvent(employee));
+                    eventPublisher.publishEvent(employeeMapper.toEmployeeUpdatedDomainEvent(updatedEmployee));
                     return updatedEmployee;
                 })
                 .orElseThrow(() -> new EmployeeDoesNotExistException(id));

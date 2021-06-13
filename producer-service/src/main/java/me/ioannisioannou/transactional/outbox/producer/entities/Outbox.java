@@ -18,10 +18,13 @@ import javax.persistence.*;
 @NoArgsConstructor
 @TypeDef(typeClass = JsonType.class, defaultForType = JsonNode.class)
 public class Outbox {
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "outbox_seq")
     private Long id;
+
+    private String aggregateType;
+
+    private String aggregateId;
 
     @Column(columnDefinition = "json")
     private JsonNode payload;
