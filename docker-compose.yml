@@ -1,8 +1,8 @@
 version: '2.4'
 services:
-  producer-service:
-    build: ./producer-service
-    container_name: producer-service
+  employee-service:
+    build: ./employee-service
+    container_name: employee-service
     ports:
       - 8001:8080
     environment:

@@ -13,7 +13,7 @@
 
 	<modules>
 		<module>domain-events</module>
-		<module>producer-service</module>
+		<module>employee-service</module>
         <module>consumer-service</module>
     </modules>
 </project>
