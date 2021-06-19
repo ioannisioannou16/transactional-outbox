@@ -17,8 +17,10 @@ The project consists of the following modules:
 ![alt text](./.images/diagram.png)
 
 * Employee Service inserts, updates or deletes employee entities and inserts generated domain events in the outbox table in a transaction.
-* Employee Service polls the outbox table and forwards events to an SNS topic. I assumed that the order of events matters, so 
-  I used an SNS FIFO topic. Also, no two instances can read the outbox table at the same time.
+* Employee Service polls the outbox table and forwards events to an SNS FIFO topic. 
+* Events related to the same employee are ordered. Events related to different employees may be consumed
+  in out of order.
+* To maintain the order of events only one employee instance can read the database at the same time.
 * Each consumer service has its own SQS FIFO.
 * SQS FIFO subscribes to the employee SNS FIFO. A filter can be used to only subscribe to specific event types.
 * Consumer Service polls its own queue and uses the domain events.
