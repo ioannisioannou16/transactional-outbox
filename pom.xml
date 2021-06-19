@@ -15,5 +15,5 @@
 		<module>domain-events</module>
 		<module>employee-service</module>
 		<module>consumer-service</module>
-    </modules>
+	</modules>
 </project>
