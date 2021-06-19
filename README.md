@@ -56,7 +56,7 @@ curl --header "Content-Type: application/json" \
 
 The `consumer-service-1` logs that it received the domain event `EmployeeCreated`. 
 
-Now if we delete the employee using the UUID from the response.
+Now we can delete the employee using the UUID from the response.
 ```shell
 curl --request DELETE http://localhost:8001/employee/8741749a-43f0-4463-a662-2ee693de749e
 ```
