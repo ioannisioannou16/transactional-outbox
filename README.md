@@ -9,7 +9,7 @@ The project consists of the following modules:
 1) [domain-events](./domain-events). Domain events shared between different services.
 2) [employee-service](./employee-service). Produces domain events reliably using the transactional outbox pattern 
    and then forwards them to an SNS FIFO topic. Uses employees as an example.
-3) [consumer-service](./consumer-service). It reads the published domain events by polling its own SQS FIFO queue. This 
+3) [consumer-service](./consumer-service). Reads the published domain events by polling its own SQS FIFO queue. This 
    could be any service interested in the events published by the `employee-service`.
 
 ## Architecture
@@ -18,12 +18,11 @@ The project consists of the following modules:
 
 * Employee Service inserts, updates or deletes employee entities and inserts generated domain events in the outbox table in a transaction.
 * Employee Service polls the outbox table and forwards events to an SNS FIFO topic. 
-* Events related to the same employee are ordered. Events related to different employees may be consumed
-  in out of order.
+* Events related to the same employee are ordered. Events related to different employees may be consumed out of order.
 * To maintain the order of events only one employee instance can read the database at the same time.
 * Each consumer service has its own SQS FIFO.
 * SQS FIFO subscribes to the employee SNS FIFO. A filter can be used to only subscribe to specific event types.
-* Consumer Service polls its own queue and uses the domain events.
+* Consumer Service polls its own queue and consumes the domain events.
 
 ## Running locally
 
