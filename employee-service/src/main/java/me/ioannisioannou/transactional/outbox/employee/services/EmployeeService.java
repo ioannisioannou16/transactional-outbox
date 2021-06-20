@@ -24,7 +24,7 @@ public class EmployeeService {
 
     public Employee create(Employee employee) {
         Employee savedEmployee = employeeRepository.save(employee);
-        eventPublisher.publishEvent(employeeMapper.toEmployeeCreatedDomainEvent(employee));
+        eventPublisher.publishEvent(employeeMapper.toEmployeeCreatedDomainEvent(savedEmployee));
         return savedEmployee;
     }
 
