@@ -20,6 +20,7 @@ The project consists of the following modules:
 * Employee Service polls the outbox table and forwards events to an SNS FIFO topic. 
 * Events related to the same employee are ordered. Events related to different employees may be consumed out of order.
 * To maintain the order of events only one employee instance can read the database at the same time.
+* SNS/SQS FIFO ensures there is no duplicate message delivery within a five-minutes interval.
 * Each consumer service has its own SQS FIFO.
 * SQS FIFO subscribes to the employee SNS FIFO. A filter can be used to only subscribe to specific event types.
 * Consumer Service polls its own queue and consumes the domain events.
