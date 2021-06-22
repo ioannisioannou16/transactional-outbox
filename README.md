@@ -1,6 +1,6 @@
 # Transactional Outbox Pattern
 
-An example of the transactional outbox pattern. The project was implemented as part of my blog post [here](), where you 
+An example of the transactional outbox pattern. The project was implemented as part of my blog post [here](https://ioannisioannou.me/transactional-outbox-pattern/), where you 
 can find more details about the pattern and implementation.
 
 ## Project structure

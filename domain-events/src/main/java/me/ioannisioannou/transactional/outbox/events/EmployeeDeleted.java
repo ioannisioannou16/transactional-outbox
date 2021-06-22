@@ -5,10 +5,10 @@ import lombok.*;
 import java.util.UUID;
 
 @Data
-@EqualsAndHashCode(callSuper = false)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class EmployeeDeleted extends DomainEvent {
     private UUID id;
 }
