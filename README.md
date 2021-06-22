@@ -22,7 +22,7 @@ The project consists of the following modules:
 * To maintain the order of events only one employee instance can read the database at the same time.
 * SNS/SQS FIFO ensures there is no duplicate message delivery within a five-minutes interval.
 * Each consumer service has its own SQS FIFO.
-* SQS FIFO subscribes to the employee SNS FIFO. A subscription filter is used to only subscribe to specific event types.
+* SQS FIFO subscribes to the employee SNS FIFO topic. A subscription filter is used to subscribe to specific event types.
 * Consumer Service polls its own queue and consumes the domain events.
 
 ## Running locally
