@@ -17,6 +17,7 @@ The project consists of the following modules:
 ![alt text](./.images/diagram.png)
 
 * Employee Service inserts, updates or deletes employee entities and inserts generated domain events in the outbox table in a transaction.
+* Uses Amazon SNS and Amazon SQS services to reliably forward events to multiple consumers.
 * Employee Service polls the outbox table and forwards events to an SNS FIFO topic. 
 * Events related to the same employee are ordered. Events related to different employees may be consumed out of order.
 * To maintain the order of events only one employee instance can read the database at the same time.
